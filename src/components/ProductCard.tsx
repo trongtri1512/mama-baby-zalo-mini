@@ -1,8 +1,10 @@
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 interface ProductCardProps {
+  id: string;
   name: string;
   image: string;
   price: number;
@@ -11,9 +13,12 @@ interface ProductCardProps {
   reviews?: number;
   isNew?: boolean;
   discount?: number;
+  slug?: string;
+  onAddToCart?: (productId: string) => void;
 }
 
 export const ProductCard = ({
+  id,
   name,
   image,
   price,
@@ -22,7 +27,10 @@ export const ProductCard = ({
   reviews = 0,
   isNew,
   discount,
+  slug,
+  onAddToCart,
 }: ProductCardProps) => {
+  const productSlug = slug || name.toLowerCase().replace(/\s+/g, "-");
   return (
     <div className="group relative bg-card rounded-xl border overflow-hidden hover:shadow-lg transition-all duration-300">
       {/* Badges */}
@@ -50,18 +58,22 @@ export const ProductCard = ({
 
       {/* Image */}
       <div className="aspect-square overflow-hidden bg-secondary/30">
-        <img
-          src={image}
-          alt={name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-        />
+        <Link to={`/product/${productSlug}`}>
+          <img
+            src={image}
+            alt={name}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        </Link>
       </div>
 
       {/* Content */}
       <div className="p-4 space-y-2">
-        <h3 className="font-medium text-sm line-clamp-2 min-h-[2.5rem]">
-          {name}
-        </h3>
+        <Link to={`/product/${productSlug}`}>
+          <h3 className="font-medium text-sm line-clamp-2 min-h-[2.5rem] hover:text-primary transition-colors">
+            {name}
+          </h3>
+        </Link>
 
         {/* Rating */}
         <div className="flex items-center gap-1 text-sm">
@@ -85,10 +97,16 @@ export const ProductCard = ({
         </div>
 
         {/* Add to Cart */}
-        <Button className="w-full opacity-0 group-hover:opacity-100 transition-opacity" size="sm">
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Thêm vào giỏ
-        </Button>
+        {onAddToCart && (
+          <Button
+            className="w-full opacity-0 group-hover:opacity-100 transition-opacity"
+            size="sm"
+            onClick={() => onAddToCart(id)}
+          >
+            <ShoppingCart className="h-4 w-4 mr-2" />
+            Thêm vào giỏ
+          </Button>
+        )}
       </div>
     </div>
   );

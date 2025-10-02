@@ -159,7 +159,7 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {featuredProducts.map((product, index) => (
-              <ProductCard key={index} {...product} />
+              <ProductCard key={index} id={`temp-${index}`} {...product} />
             ))}
           </div>
           <div className="mt-6 text-center md:hidden">
